@@ -52,6 +52,21 @@ module Boxr
       updated_file
     end
 
+    def update_file_by_id(file_id : nil, parent_id: nil, name: nil, description: nil, parent: nil, shared_link: nil, tags: nil, lock: nil, if_match: nil)
+      uri = "#{FILES_URI}/#{file_id}"
+
+      attributes = {}
+      attributes[:name] = name unless name.nil?
+      attributes[:description] = description unless description.nil?
+      attributes[:parent] = {id: parent_id} unless parent_id.nil?
+      attributes[:shared_link] = shared_link unless shared_link.nil?
+      attributes[:tags] = tags unless tags.nil?
+      attributes[:lock] = lock unless lock.nil?
+
+      updated_file, response = put(uri, attributes, if_match: if_match)
+      updated_file
+    end
+
     def lock_file(file, expires_at: nil, is_download_prevented: false, if_match: nil)
       lock = {type: "lock"}
       lock[:expires_at] = expires_at.to_datetime.rfc3339 unless expires_at.nil?
