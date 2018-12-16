@@ -53,7 +53,7 @@ module Boxr
     auth_post(uri, body)
   end
 
-  def downscope_token(token, scope, folder_id)
+  def self.downscope_token(token, scope, folder_id)
     attributes = {subject_token: token }
     attributes[:subject_token_type] = 'urn:ietf:params:oauth:token-type:access_token'
 
