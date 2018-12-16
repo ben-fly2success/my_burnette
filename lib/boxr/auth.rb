@@ -61,7 +61,7 @@ module Boxr
     attributes[:resource] = "https://api.box.com/2.0/folders/#{folder_id}"
     attributes[:grant_type] = 'urn:ietf:params:oauth:grant-type:token-exchange'
 
-    token_infos, response = BOX_CLIENT.post("https://api.box.com/2.0/oauth2/token", attributes, if_match: if_match)
+    token_infos, response = BOX_CLIENT.post("https://api.box.com/2.0/oauth2/token", attributes)
     token_infos
   end
 
