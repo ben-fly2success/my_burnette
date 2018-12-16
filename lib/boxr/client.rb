@@ -27,6 +27,7 @@ module Boxr
     METADATA_TEMPLATES_URI = "#{API_URI}/metadata_templates"
     EVENTS_URI = "#{API_URI}/events"
     WEB_LINKS_URI = "#{API_URI}/web_links"
+    TOKEN_URI = "#{API_URI}/oauth2/token"
 
 
     DEFAULT_LIMIT = 100
@@ -312,6 +313,17 @@ module Boxr
       updated_item
     end
 
+    def downscope_token(token, scope, folder_id)
+      attributes = {subject_token: token }
+      attributes[:subject_token_type] = 'urn:ietf:params:oauth:token-type:access_token'
+
+      attributes[:scope] = scope
+      attributes[:resource] = "#{FOLDERS_URI}/#{folder_id}"
+      attributes[:grant_type] = 'urn:ietf:params:oauth:grant-type:token-exchange'
+
+      token_infos, response = post(TOKEN_URI, attributes, if_match: if_match)
+      token_infos
+    end
   end
 
 end
