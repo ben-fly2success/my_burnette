@@ -58,7 +58,7 @@ module Boxr
     attributes[:subject_token_type] = 'urn:ietf:params:oauth:token-type:access_token'
 
     attributes[:scope] = scope
-    attributes[:resource] = "#{FOLDERS_URI}/#{folder_id}"
+    attributes[:resource] = "https://api.box.com/2.0/folders/#{folder_id}"
     attributes[:grant_type] = 'urn:ietf:params:oauth:grant-type:token-exchange'
 
     token_infos, response = post(TOKEN_URI, attributes, if_match: if_match)
