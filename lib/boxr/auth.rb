@@ -8,7 +8,7 @@ module Boxr
     query = {"response_type" => "#{response_type}", "state" => "#{state}", "client_id" => "#{client_id}"}
     query["scope"] = "#{scope}" unless scope.nil?
     query["folder_id"] = "#{folder_id}" unless folder_id.nil?
-    
+
     uri = template.expand({"host" => "#{host}", "query" => query})
     uri
   end
@@ -25,7 +25,7 @@ module Boxr
   end
 
   def self.get_enterprise_token(private_key: ENV['JWT_PRIVATE_KEY'], private_key_password: ENV['JWT_PRIVATE_KEY_PASSWORD'],
-                                public_key_id: ENV['JWT_PUBLIC_KEY_ID'], enterprise_id: ENV['BOX_ENTERPRISE_ID'], 
+                                public_key_id: ENV['JWT_PUBLIC_KEY_ID'], enterprise_id: ENV['BOX_ENTERPRISE_ID'],
                                 client_id: ENV['BOX_CLIENT_ID'], client_secret: ENV['BOX_CLIENT_SECRET'])
     unlocked_private_key = unlock_key(private_key, private_key_password)
     assertion = jwt_assertion(unlocked_private_key, client_id, enterprise_id, "enterprise", public_key_id)
@@ -53,6 +53,18 @@ module Boxr
     auth_post(uri, body)
   end
 
+  def downscope_token(token, scope, folder_id)
+    attributes = {subject_token: token }
+    attributes[:subject_token_type] = 'urn:ietf:params:oauth:token-type:access_token'
+
+    attributes[:scope] = scope
+    attributes[:resource] = "#{FOLDERS_URI}/#{folder_id}"
+    attributes[:grant_type] = 'urn:ietf:params:oauth:grant-type:token-exchange'
+
+    token_infos, response = post(TOKEN_URI, attributes, if_match: if_match)
+    token_infos
+  end
+
   class << self
     alias :get_token :get_tokens
     alias :refresh_token :refresh_tokens
@@ -74,7 +86,7 @@ module Boxr
 
     additional_headers = {}
     additional_headers['kid'] = public_key_id unless public_key_id.nil?
-    
+
     JWT.encode(payload, private_key, "RS256", additional_headers)
   end
 
