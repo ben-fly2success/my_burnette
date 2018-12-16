@@ -54,15 +54,12 @@ module Boxr
   end
 
   def self.downscope_token(token, scope, folder_id)
-    attributes = {subject_token: token }
-    attributes[:subject_token_type] = 'urn:ietf:params:oauth:token-type:access_token'
-
-    attributes[:scope] = scope
-    attributes[:resource] = "https://api.box.com/2.0/folders/#{folder_id}"
-    attributes[:grant_type] = 'urn:ietf:params:oauth:grant-type:token-exchange'
-
-    token_infos, response = BOX_CLIENT.post("https://api.box.com/2.0/oauth2/token", attributes)
-    token_infos
+    uri = "https://api.box.com/2.0/oauth2/token"
+    subject_token_type = 'urn:ietf:params:oauth:token-type:access_token'
+    resource = "https://api.box.com/2.0/folders/#{folder_id}"
+    grant_type = 'urn:ietf:params:oauth:grant-type:token-exchange'
+    body = "subject_token=#{token}&subject_token_type=#{subject_token_type}&scope=#{scope}&resource=#{resource}&grant_type=#{grant_type}"
+    auth_post(uri, body)
   end
 
   class << self
