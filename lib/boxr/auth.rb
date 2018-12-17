@@ -54,11 +54,16 @@ module Boxr
   end
 
   def self.downscope_token(token, scope, folder_id)
-    uri = "https://api.box.com/2.0/oauth2/token"
+    uri = "https://api.box.com/oauth2/token"
     subject_token_type = 'urn:ietf:params:oauth:token-type:access_token'
     resource = "https://api.box.com/2.0/folders/#{folder_id}"
     grant_type = 'urn:ietf:params:oauth:grant-type:token-exchange'
+    scope = "item_upload"
     body = "subject_token=#{token}&subject_token_type=#{subject_token_type}&scope=#{scope}&resource=#{resource}&grant_type=#{grant_type}"
+    ap body
+
+    BOX_CLIENT.debug_dev = $stdout
+
     auth_post(uri, body)
   end
 
