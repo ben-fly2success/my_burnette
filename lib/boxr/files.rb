@@ -206,8 +206,7 @@ module Boxr
       new_file
     end
 
-    def thumbnail(file, min_height: nil, min_width: nil, max_height: nil, max_width: nil)
-      file_id = ensure_id(file)
+    def thumbnail_from_id(file_id, min_height: nil, min_width: nil, max_height: nil, max_width: nil)
       uri = "#{FILES_URI}/#{file_id}/thumbnail.png"
       query = {}
       query[:min_height] = min_height unless min_height.nil?
@@ -224,6 +223,11 @@ module Boxr
       end
 
       thumbnail
+    end
+
+    def thumbnail(file, min_height: nil, min_width: nil, max_height: nil, max_width: nil)
+      file_id = ensure_id(file)
+      thumbnail_from_id(file_id, min_height: min_height, min_width: min_width, max_height: max_height, max_width: max_width)
     end
 
     def create_shared_link_for_file(file, access: nil, unshared_at: nil, can_download: nil, can_preview: nil, password: nil)
