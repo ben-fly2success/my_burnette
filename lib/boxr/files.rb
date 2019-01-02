@@ -225,6 +225,10 @@ module Boxr
       thumbnail
     end
 
+    def thumbnail_url_from_id(file_id, min_height: nil, min_width: nil, max_height: nil, max_width: nil)
+      uri = "#{FILES_URI}/#{file_id}/thumbnail.png"
+    end
+
     def thumbnail(file, min_height: nil, min_width: nil, max_height: nil, max_width: nil)
       file_id = ensure_id(file)
       thumbnail_from_id(file_id, min_height: min_height, min_width: min_width, max_height: max_height, max_width: max_width)
