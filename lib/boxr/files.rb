@@ -52,7 +52,7 @@ module Boxr
       updated_file
     end
 
-    def update_file_by_id(file_id: nil, parent_id: nil, name: nil, description: nil, parent: nil, shared_link: nil, tags: nil, lock: nil, if_match: nil)
+    def update_file_by_id(file_id: nil, parent_id: nil, name: nil, description: nil, shared_link: nil, tags: nil, lock: nil, if_match: nil)
       uri = "#{FILES_URI}/#{file_id}"
 
       attributes = {}
@@ -181,6 +181,12 @@ module Boxr
 
     def delete_file(file, if_match: nil)
       file_id = ensure_id(file)
+      uri = "#{FILES_URI}/#{file_id}"
+      result, response = delete(uri, if_match: if_match)
+      result
+    end
+
+    def delete_file_from_id(file_id, if_match: nil)
       uri = "#{FILES_URI}/#{file_id}"
       result, response = delete(uri, if_match: if_match)
       result
