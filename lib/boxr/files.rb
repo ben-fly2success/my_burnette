@@ -162,6 +162,20 @@ module Boxr
       file_info.entries[0]
     end
 
+    def upload_new_version_of_file_from_id(file_id, file, content_modified_at: nil, send_content_md5: true,
+                                    preflight_check: true, if_match: nil)
+      uri = "#{UPLOAD_URI}/files/#{file_id}/content"
+      file_info = nil
+      response = nil
+
+      content_md5 = send_content_md5 ? Digest::SHA1.file(file).hexdigest : nil
+      attributes = {filename: file}
+      attributes[:content_modified_at] = content_modified_at.to_datetime.rfc3339 unless content_modified_at.nil?
+      file_info, response = post(uri, attributes, process_body: false, content_md5: content_md5, if_match: if_match)
+
+      file_info.entries[0]
+    end
+
     def versions_of_file(file)
       file_id = ensure_id(file)
       uri = "#{FILES_URI}/#{file_id}/versions"
