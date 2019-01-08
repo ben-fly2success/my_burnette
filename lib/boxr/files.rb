@@ -52,7 +52,7 @@ module Boxr
       updated_file
     end
 
-    def update_file_by_id(file_id: nil, parent_id: nil, name: nil, description: nil, shared_link: nil, tags: nil, lock: nil, if_match: nil)
+    def update_file_from_id(file_id: nil, parent_id: nil, name: nil, description: nil, shared_link: nil, tags: nil, lock: nil, if_match: nil)
       uri = "#{FILES_URI}/#{file_id}"
 
       attributes = {}
