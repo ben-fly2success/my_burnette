@@ -143,7 +143,7 @@ module Boxr
       file_info.entries[0]
     end
 
-    def upload_file_from_stream(stream, parent, name, content_created_at: nil, content_modified_at: nil,
+    def upload_file_from_string(string, parent, name, content_created_at: nil, content_modified_at: nil,
                     preflight_check: true, send_content_md5: true)
 
       parent_id = ensure_id(parent)
@@ -153,8 +153,8 @@ module Boxr
       file_info = nil
       response = nil
 
-      file = stream
-      content_md5 = send_content_md5 ? Digest::SHA1.file(file).hexdigest : nil
+      file = StringIO.new(string)
+      content_md5 = send_content_md5 ? Digest::SHA1.new.update(string).hexdigest : nil
 
       attributes = {name: filename, parent: {id: parent_id}}
       attributes[:content_created_at] = content_created_at.to_datetime.rfc3339 unless content_created_at.nil?
