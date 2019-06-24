@@ -41,6 +41,20 @@ module Boxr
       end
     end
 
+    def folder_items_from_id(folder_id, fields: [], offset: nil, limit: nil)
+      query = build_fields_query(fields, FOLDER_AND_FILE_FIELDS_QUERY)
+      uri = "#{FOLDERS_URI}/#{folder_id}/items"
+
+      if offset.nil? || limit.nil?
+        items = get_all_with_pagination(uri, query: query, offset: 0, limit: FOLDER_ITEMS_LIMIT)
+      else
+        query[:offset] = offset
+        query[:limit] = limit
+        items, response = get(uri, query: query)
+        items['entries']
+      end
+    end
+
     def root_folder_items(fields: [], offset: nil, limit: nil)
       folder_items(Boxr::ROOT, fields: fields, offset: offset, limit: limit)
     end
